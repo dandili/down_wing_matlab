@@ -1,0 +1,62 @@
+% Reading the data from the file
+filename = 'WingDownResults.txt'; 
+data = readmatrix(filename);
+
+% Extracting coordinates and total pressure values
+x = data(:, 1);
+y = data(:, 2);
+z = data(:, 3);
+pressure = data(:, 4);
+
+% Check if data is read correctly
+if isempty(data)
+    error('Data is empty. Check the filename or file path.');
+end
+
+% Creating a 3D scatter plot for initial data visualization
+figure;
+scatter3(x, y, z, 20, pressure, 'filled');
+colorbar;
+title('3D Scatter Plot of Total Pressure');
+xlabel('X Coordinate');
+ylabel('Y Coordinate');
+zlabel('Z Coordinate');
+
+% Creating grid for interpolation
+[xi, yi, zi] = meshgrid(linspace(min(x), max(x), 50), linspace(min(y), max(y), 50), linspace(min(z), max(z), 50));
+
+% Interpolating pressure data to the grid
+pressureGrid = griddata(x, y, z, pressure, xi, yi, zi);
+
+% Check if interpolation is successful
+if all(isnan(pressureGrid), 'all')
+    error('Interpolation unsuccessful. All values are NaN.');
+end
+
+% Generating isosurface for a specified value of pressure
+value = mean(pressure(~isnan(pressure))); % Avoiding NaN values
+
+% Check if the specified value is appropriate
+if isnan(value)
+    error('Specified value for isosurface is NaN. Check the pressure data.');
+end
+
+% Plotting isosurface
+[f, v] = isosurface(xi, yi, zi, pressureGrid, value);
+
+% Check if isosurface generation is successful
+if isempty(f)
+    error('Isosurface generation unsuccessful. Check the value or pressure data.');
+end
+
+% Creating the 3D isosurface plot
+figure;
+patch('Faces', f, 'Vertices', v, 'FaceVertexCData', jet(numel(f)), 'FaceColor', 'interp', 'EdgeColor', 'none');
+colorbar;
+title('3D Isosurface of Total Pressure');
+xlabel('X Coordinate');
+ylabel('Y Coordinate');
+zlabel('Z Coordinate');
+axis equal;
+view(3); % 3D view
+camlight; lighting gouraud;
