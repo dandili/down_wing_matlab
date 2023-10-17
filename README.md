@@ -7,6 +7,8 @@ This repository provides MATLAB scripts for visualizing fluid flow fields in 3D,
 The sample data used in these scripts, `WingDownResults.txt`, is provided courtesy of the Mathworks MATLAB and Simulink Racing Lounge.
 
 ## Visualizations
+![3D Viz](https://raw.githubusercontent.com/dandili/down_wing_matlab/main/3d%20scatter%20velocity%20magnitude.png)
+
 - **2D Contour Plots:** Visualize scalar fields like pressure and velocity magnitude on specified planes.
 - **3D Scatter Plots:** Explore the spatial distribution of scalar quantities in 3D space.
 - **Quiver Plots:** Analyze the vector field of velocities in 3D to understand flow directions and magnitudes.
